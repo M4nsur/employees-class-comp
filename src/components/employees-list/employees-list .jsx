@@ -1,7 +1,7 @@
 import EmployeesListItem from "../employees-list-item/employees-list-item";
 import './employees-list.css';
 
-const EmployeesList = ({date, onDelete, onAdd}) => {
+const EmployeesList = ({date, onDelete, onHandle}) => {
     const items = date.map(el => {
         const {id, ...itemProps} = el
         return (
@@ -9,6 +9,7 @@ const EmployeesList = ({date, onDelete, onAdd}) => {
             key={id} 
             {...itemProps}
             onDelete={()=> onDelete(id)}
+            onHandle={(e) => onHandle(id, e.currentTarget.getAttribute('dataForHandle'))}
             />
         )
     })

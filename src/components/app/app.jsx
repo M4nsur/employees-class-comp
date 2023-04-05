@@ -11,11 +11,10 @@ class App extends Component {
     super(props);
     this.state = {
       date: [
-        { name: "Kai Fors", salary: 300, increase: false, id: 1 },
-        { name: "John Smith", salary: 5200, increase: false, id: 2 },
-        { name: "Kai", salary: 4000, increase: true, id: 3 },
+        { name: "Kai Fors", salary: 300, increase: false, id: 1, fav: false },
+        { name: "John Smith", salary: 5200, increase: false, id: 2, fav: false },
+        { name: "Kai", salary: 4000, increase: false, id: 3, fav: false },
       ],
-      idGenerate: 4
     };
   }
 
@@ -36,15 +35,50 @@ class App extends Component {
     });
   };
 
+  handleIncrease = (id) => {
+    this.setState(({date}) => {
+      return {
+        date: date.map(el => {
+          if (el.id === id) {
+            return {...el, increase: !el.increase}
+          }
+          return el
+        })
+      }
+    }) 
+}
+
+handleProp = (id, prop) => {
+  this.setState(({date}) => {
+    return {
+      date: date.map(el => {
+        if (el.id === id) {
+          return {...el, [prop]: !el[prop]}
+        }
+        return el
+      })
+    }
+  }) 
+}
+
   render() {
+    const counterIncrease =
+      this.state.date.filter(el => {
+        return el.increase;
+      })
+  
     return (
       <div className="app">
-        <AppInfo />
+        <AppInfo amountEmp={this.state.date.length} increaseEmp={counterIncrease.length}/>
         <div className="search-panel">
           <SearchPanel />
           <AppFilter />
         </div>
-        <EmployeesList date={this.state.date} onDelete={this.deleteItem} />
+        <EmployeesList 
+          date={this.state.date} 
+          onDelete={this.deleteItem} 
+          onHandle={this.handleProp}
+          />
         <EmployeesAddForm onAdd={this.addItem} id={this.state.date.length + 1}/>
       </div>
     );
